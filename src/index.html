@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Minesweeper</title>
+        <style>
+            body {
+                display: flex;
+                justify-content: space-between;
+                align-items: flex-start;
+                margin: 20px;
+            }
+            #gameContainer {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+            #board {
+                display: grid;
+                grid-template-columns: repeat(10, 30px);
+                grid-template-rows: repeat(10, 30px);
+                gap: 1px;
+                margin: 20px auto;
+            }
+            .cell {
+                width: 30px;
+                height: 30px;
+                border: 1px solid black;
+                background-color: lightgray;
+                text-align: center;
+                line-height: 30px;
+                cursor: pointer;
+            }
+            .cell.mine {
+                background-color: red;
+            }
+            .cell.mine:hover {
+                background-color: red;
+                cursor: default;
+            }
+            .cell.safe:hover {
+                background-color: white;
+                cursor: default;
+            }
+            .cell.safe {
+                background-color: white;
+            }
+            .cell:hover {
+                background-color: rgb(226, 226, 226);
+            }
+            #settings {
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+                margin-top: 20px;
+            }
+            #settings label {
+                margin-top: 10px;
+            }
+            #settings input {
+                margin-right: 10px;
+                width: 60px;
+            }
+            #resetButton {
+                display: block;
+                margin: 20px auto;
+                padding: 10px 20px;
+                font-size: 16px;
+                cursor: pointer;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="gameContainer">
+            <h1>Minesweeper</h1>
+            <div id="board"></div>
+            <div>Flags: <span id="flag-count-value"></span></div>
+        </div>
+        <div id="settings">
+            <label for="boardSize">Board Size:</label>
+            <input type="number" id="boardSize" value="10", min="5", max="20">
+            <label for="mineCount">Mine Count:</label>
+            <input type="number" id="mineCount" value="10", min="1">
+            <button id="resetButton">Reset Game</button>
+        </div>
+        <script src="renderer.js"></script>
+    </body>
+</html>
