@@ -30,6 +30,12 @@ function createWindow() {
                         win.loadFile('src/snake.html');
                     },
                 },
+                {
+                    label: 'Tetris',
+                    click: () => {
+                        win.loadFile('src/tetris.html');
+                    },
+                }
             ],
         },
     ]);
