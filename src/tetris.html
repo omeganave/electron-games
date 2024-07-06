@@ -7,9 +7,10 @@
     <style>
         body {
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            height: 90vh;
             margin: 0;
             background-color: black;
         }
@@ -20,6 +21,18 @@
             background-color: white;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
         }
+        #stats {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+        }
+        #score, #level {
+            font-size: 24px;
+            margin: 10px;
+            width: 150px;
+            text-align: center;
+        }
         canvas {
             border: 1px solid black;
         }
@@ -27,6 +40,11 @@
 </head>
 <body>
     <div id="tetris">
+        <div id="stats">
+            <div id="level">Level: 0</div>
+            <br>
+            <div id="score">Score: 0</div>
+        </div>
         <canvas id="gameCanvas" width="300" height="600"></canvas>
     </div>
     <script src="tetris.js"></script>

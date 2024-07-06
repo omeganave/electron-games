@@ -15,7 +15,7 @@ const COLORS = [
     '#f0f',
     '#f00'
 ];
-const DROP_INTERVAL = 500;
+let DROP_INTERVAL = 500;
 const SHAPES = [
     [],
     [
@@ -49,8 +49,11 @@ const SHAPES = [
 
 let board = Array.from({ length: ROWS }, () => Array(COLS).fill(0));
 let currentShape = getRandomShape();
-let currentX = 0;
+let currentX = Math.floor(COLS / 2) - Math.floor(currentShape[0].length / 2);
 let currentY = 0;
+let score = 0;
+let level = 0;
+let linesCleared = 0;
 
 function drawBoard() {
     for (let row = 0; row < ROWS; row++) {
@@ -86,9 +89,10 @@ function moveDown() {
     if (!isValidMove()) {
         currentY--;
         placeShape();
-        clearFullRows();
+        const rowsClearedInMove = clearFullRows();
+        updateScore(rowsClearedInMove);
         currentShape = getRandomShape();
-        currentX = 0;
+        currentX = Math.floor(COLS / 2) - Math.floor(currentShape[0].length / 2);
         currentY = 0;
         if (!isValidMove()) {
             alert('Game over!');
@@ -123,19 +127,32 @@ function placeShape() {
 }
 
 function clearFullRows() {
+    let rowsCleared = 0;
     for (let row = ROWS - 1; row >= 0; row--) {
-        if (board[row].every((cell) => cell !== 0)) {
+        if (board[row].every(cell => cell !== 0)) {
             board.splice(row, 1);
             board.unshift(Array(COLS).fill(0));
+            rowsCleared++;
+            row++;
         }
     }
+    linesCleared += rowsCleared;
+    if (linesCleared >= (level + 1) * 10) {
+        level++;
+        dropInterval -= 10;
+    }
+    return rowsCleared;
 }
 
 function resetGame() {
     board = Array.from({ length: ROWS }, () => Array(COLS).fill(0));
     currentShape = getRandomShape();
-    currentX = 0;
+    currentX = Math.floor(COLS / 2) - Math.floor(currentShape[0].length / 2);
     currentY = 0;
+    score = 0;
+    updateScore(-1);
+    level = 0;
+    linesCleared = 0;
 }
 
 function rotateShape() {
@@ -145,6 +162,21 @@ function rotateShape() {
     if (!isValidMove()) {
         currentShape = originalShape;
     }
+}
+
+function updateScore(rowsCleared) {
+    if (rowsCleared > 0) {
+        const scores = [40, 100, 300, 1200];
+        score += scores[rowsCleared - 1] * (level + 1);
+        document.getElementById('score').innerText = `Score: ${score}`;
+    } else if (rowsCleared === -1) {
+        score = 0;
+        document.getElementById('score').innerText = `Score: ${score}`;
+    }
+}
+
+function getDropInterval() {
+    return DROP_INTERVAL / (1 + level * 0.1);
 }
 
 function gameLoop() {
@@ -174,7 +206,7 @@ document.addEventListener('keydown', (event) => {
 
 function startGame() {
     gameLoop();
-    setInterval(moveDown, DROP_INTERVAL);
+    setInterval(moveDown, getDropInterval());
 }
 
 startGame();
