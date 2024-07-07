@@ -1,5 +1,6 @@
-const { app, BrowserWindow, Menu } = require('electron');
+const { app, BrowserWindow, Menu, ipcMain } = require('electron');
 const path = require('path');
+const { Howl, Howler } = require('howler');
 
 function createWindow() {
     const win = new BrowserWindow({
@@ -8,11 +9,12 @@ function createWindow() {
         webPreferences: {
             preload: path.join(__dirname, 'preload.js'),
             nodeIntegration: true,
-            contextIsolation: false
+            contextIsolation: true,
+            enableRemoteModule: false,
         }
     });
 
-    win.loadFile('src/minesweeper.html');
+    win.loadFile('src/asteroids.html');
 
     const menu = Menu.buildFromTemplate([
         {
@@ -34,6 +36,12 @@ function createWindow() {
                     label: 'Tetris',
                     click: () => {
                         win.loadFile('src/tetris.html');
+                    },
+                },
+                {
+                    label: 'Asteroids',
+                    click: () => {
+                        win.loadFile('src/asteroids.html');
                     },
                 }
             ],
@@ -59,3 +67,22 @@ app.on('window-all-closed', () => {
         app.quit();
     }
 });
+
+const fireSound = new Howl({ src: [path.join(__dirname, 'shoot.wav')] });
+const explosionSound = new Howl({ src: [path.join(__dirname, 'explode.wav')] });
+const crashSound = new Howl({ src: [path.join(__dirname, 'crash.wav')] });
+
+ipcMain.on('play-sound', (event, sound) => {
+    console.log(`Playing sound: ${sound}`);
+    if (sound === 'fire') {
+        fireSound.play();
+    } else if (sound === 'explosion') {
+        explosionSound.play();
+    } else if (sound === 'crash') {
+        crashSound.play();
+    }
+});
+
+// ipcMain.on('test-message', (event, message) => {
+//     console.log(`Received message: ${message}`);
+// });

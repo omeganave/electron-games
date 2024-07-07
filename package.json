@@ -26,5 +26,8 @@
     "win": {
       "target": "nsis"
     }
+  },
+  "dependencies": {
+    "howler": "^2.2.4"
   }
 }
