@@ -14,7 +14,7 @@ function createWindow() {
         }
     });
 
-    win.loadFile('src/asteroids.html');
+    win.loadFile('src/breakout.html');
 
     const menu = Menu.buildFromTemplate([
         {
@@ -43,7 +43,13 @@ function createWindow() {
                     click: () => {
                         win.loadFile('src/asteroids.html');
                     },
-                }
+                },
+                {
+                    label: 'Breakout',
+                    click: () => {
+                        win.loadFile('src/breakout.html');
+                    },
+                },
             ],
         },
     ]);
